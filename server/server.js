@@ -1,7 +1,10 @@
 import "dotenv/config"
+const connectToDb = require("../config/dbConfig")
 const errorHandler = require("../middlewares/errorHandler"),
   logger = require("../middlewares/logger"),
   boom = require("express-boom"),
+  bodyParser = require("body-parser"),
+  cors = require("cors"),
   routes = require("../routes/routes")
 
 const express = require("express"),
@@ -10,6 +13,9 @@ const express = require("express"),
 
 //Error Parser
 app.use(boom())
+
+//CORS
+app.use(cors())
 
 //Morgan Logging
 app.use(
@@ -30,24 +36,34 @@ app.use(
   })
 )
 
+//Body-Parser
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }))
+
+// parse application/json
+app.use(bodyParser.json())
+
 //Router
 app.use("/api", routes)
 
 //Logger
 app.use("*", function(req, res) {
+  console.log(req && req.username)
   logger.debug("Debug statement")
   logger.info("Info statement")
 })
 
 //Environment Settings
 app.set("port", process.env.PORT || 3000)
-app.listen(app.get("port"), () => {
-  console.log(
-    "Node server Started @ " +
-      new Date() +
-      " Running on port no: " +
-      app.get("port")
-  )
+connectToDb().then(async () => {
+  app.listen(app.get("port"), () => {
+    console.log(
+      "Node server Started @ " +
+        new Date() +
+        " Running on port no: " +
+        app.get("port")
+    )
+  })
 })
 
 app.use(errorHandler)

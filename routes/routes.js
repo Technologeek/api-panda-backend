@@ -1,10 +1,7 @@
 const express = require("express"),
-  router = express.Router()
+  router = express.Router(),
+  userRouter = require("./userRoutes")
 
-router.get("/", (req, res) => {
-  res.send("Hellow WORLD")
-})
-router.get("/getUsers", (req, res) => {
-  res.send("List of Users")
-})
+router.use("/", userRouter)
+
 module.exports = router
