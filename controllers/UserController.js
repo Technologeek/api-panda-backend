@@ -1,6 +1,6 @@
 const hashPassword = require("../utils/hashPassword")
-const User = require("../models/userModel")
 const { body, validationResult } = require("express-validator/check")
+const createNewUser = require("../queries/queries")
 
 const UserController = {
   validate: method => {
@@ -27,17 +27,7 @@ const UserController = {
     }
     let { username, email, password } = req.body
     let encrypted_password = await hashPassword(password)
-    let UserModel = new User({
-      username: username,
-      email: email,
-      password: encrypted_password
-    })
-    UserModel.save(error => {
-      if (error) {
-        return next(error)
-      }
-      res.send("Product Created successfully")
-    })
+    await createNewUser(username, email, encrypted_password, res, req, next)
   }
 }
 module.exports = UserController
