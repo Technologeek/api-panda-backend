@@ -7,4 +7,10 @@ router.post(
   UserController.validate("registerNewUser"),
   UserController.registerNewUser
 )
+
+router.post(
+  "/login",
+  UserController.validate("loginUser"),
+  UserController.loginUser
+)
 module.exports = router

@@ -3,6 +3,7 @@ const connectToDb = require("../config/dbConfig")
 const errorHandler = require("../middlewares/errorHandler"),
   logger = require("../middlewares/logger"),
   boom = require("express-boom"),
+  passport = require("passport"),
   bodyParser = require("body-parser"),
   cors = require("cors"),
   routes = require("../routes/routes")
@@ -16,6 +17,9 @@ app.use(boom())
 
 //CORS
 app.use(cors())
+
+//Passport
+app.use(passport.initialize())
 
 //Morgan Logging
 app.use(

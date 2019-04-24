@@ -11,4 +11,14 @@ const hashPassword = async password => {
   return hashedPassword
 }
 
-module.exports = hashPassword
+const comparePasswordHash = async plainPassword => {
+  const passwordFlag = await new Promise((resolve, reject) => {
+    console.log(plainPassword)
+    bcrypt.compare(plainPassword, this.password, (err, isMatch) => {
+      if (err) reject(err)
+      resolve(isMatch)
+    })
+  })
+  return passwordFlag
+}
+module.exports = { hashPassword, comparePasswordHash }
