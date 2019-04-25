@@ -1,5 +1,6 @@
 const User = require("../models/userModel")
 const jwt = require("jsonwebtoken")
+const bcrypt = require("bcrypt")
 
 const createNewUser = async (username, email, password, res, req, next) => {
   const createUserQuery = await new Promise((resolve, reject) => {
@@ -48,7 +49,26 @@ const loginExistingUser = async (email, password, res, req, next) => {
         if (error) {
           return reject(next(error))
         }
-        console.log(isMatch)
+        if (isMatch) {
+          let userDetails = {
+            email: email,
+            password: password
+          }
+          const generatedToken = jwt.sign(
+            userDetails,
+            process.env.JWT_ENCRYPTION_KEY,
+            { algorithm: "HS256" },
+            { expiresIn: 36000 },
+            (err, token) => {
+              if (err)
+                res.status(500).json({ error: "Error signing token", raw: err })
+            }
+          )
+          let responseToSend = {
+            token: generatedToken
+          }
+          resolve(res.status(200).send(JSON.stringify(responseToSend)))
+        }
       })
     })
   })

@@ -11,10 +11,10 @@ const hashPassword = async password => {
   return hashedPassword
 }
 
-const comparePasswordHash = async plainPassword => {
-  const passwordFlag = await new Promise((resolve, reject) => {
+const comparePasswordHash = async function(plainPassword) {
+  const passwordFlag = await new Promise(function(resolve, reject) {
     console.log(plainPassword)
-    bcrypt.compare(plainPassword, this.password, (err, isMatch) => {
+    bcrypt.compare(plainPassword, this.password, function(err, isMatch) {
       if (err) reject(err)
       resolve(isMatch)
     })

@@ -1,4 +1,4 @@
-const hashPassword = require("../utils/hashPassword")
+const { hashPassword } = require("../utils/hashPassword")
 const { body, validationResult } = require("express-validator/check")
 const { createNewUser, loginExistingUser } = require("../queries/queries")
 const UserController = {
