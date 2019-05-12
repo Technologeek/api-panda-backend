@@ -1,6 +1,6 @@
 const User = require("../models/userModel")
 const jwt = require("jsonwebtoken")
-const bcrypt = require("bcrypt")
+const boom = require("express-boom")
 
 const createNewUser = async (username, email, password, res, req, next) => {
   const createUserQuery = await new Promise((resolve, reject) => {
@@ -47,7 +47,8 @@ const loginExistingUser = async (email, password, res, req, next) => {
       }
       user.comparePassword(password, (error, isMatch) => {
         if (error) {
-          return reject(next(error))
+          console.log(error)
+          return reject(boom.unauthorized("invalid password"))
         }
         if (isMatch) {
           let userDetails = {

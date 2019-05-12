@@ -16,11 +16,4 @@ router.post(
   UserController.loginUser
 )
 
-router.get(
-  "/collections",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    return res.status(200).json({ Success: "Success signing token" })
-  }
-)
 module.exports = router

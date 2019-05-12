@@ -52,6 +52,7 @@ app.use("/api", routes)
 
 //Logger
 app.use("*", function(req, res) {
+  res.boom.notFound()
   console.log(req && req.username)
   logger.debug("Debug statement")
   logger.info("Info statement")
