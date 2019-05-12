@@ -5,6 +5,7 @@ const mongoose = require("mongoose"),
 const bcrypt = require("bcrypt")
 const CollectionSchema = require("../models/collectionModel")
 
+//User=Schema
 const UserSchema = new Schema(
   {
     username: { type: String, required: true, max: 100, unique: true },

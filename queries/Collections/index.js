@@ -47,7 +47,6 @@ const readUserCollection = async (user_id, res, req, next) => {
       resolve(res.status(200).send(JSON.stringify(dataToReturn)))
     })
   })
-  console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>")
   return readUserCollectionsQuery
 }
 module.exports = { createNewCollection, readUserCollection }
