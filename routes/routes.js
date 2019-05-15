@@ -1,12 +1,16 @@
 const express = require("express"),
   router = express.Router(),
-  userRouter = require("./userRoutes"),
-  collectionRouter = require("./collectionRoutes"),
+  authRoutes = require("./authRoutes"),
+  userRoutes = require("./userRoutes"),
+  collectionRoutes = require("./collectionRoutes"),
+  miscRoutes = require("./miscRoutes"),
   passport = require("passport"),
   boom = require("express-boom")
 
-router.use("/", userRouter)
-router.use("/", collectionRouter)
+router.use("/users", userRoutes)
+router.use("/auth", authRoutes)
+router.use("/collections", collectionRoutes)
+router.use("/", miscRoutes)
 router.use("/", passport.initialize())
 router.use("/", boom)
 module.exports = router

@@ -1,19 +1,18 @@
 const express = require("express"),
   router = express.Router(),
-  UserController = require("../controllers/UserController"),
+  CollectionController = require("../controllers/CollectionController"),
   passport = require("passport")
 require("../middlewares/passport")(passport)
 
 router.post(
-  "/signup",
-  UserController.validate("registerNewUser"),
-  UserController.registerNewUser
+  "/:userid/collections",
+  passport.authenticate("jwt", { session: false }),
+  CollectionController.createNewCollection
 )
 
-router.post(
-  "/login",
-  UserController.validate("loginUser"),
-  UserController.loginUser
+router.get(
+  "/:userid/collections",
+  passport.authenticate("jwt", { session: false }),
+  CollectionController.readAllUserCollections
 )
-
 module.exports = router

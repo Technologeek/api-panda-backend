@@ -1,7 +1,9 @@
 const { body, validationResult } = require("express-validator/check")
 const {
   createNewCollection,
-  readUserCollection
+  readUserCollection,
+  updateUserCollection,
+  removeUserCollection
 } = require("../queries/Collections")
 
 const CollectionController = {
@@ -67,8 +69,23 @@ const CollectionController = {
   },
   readAllUserCollections: async (req, res, next) => {
     let user_id = req.params.userid
-    console.log(user_id)
-    await readUserCollection(user_id, res, req, next)
+    const query = req.query
+    await readUserCollection(user_id, res, req, next, query)
+  },
+  updateCollection: async (req, res, next) => {
+    const updateData = req.body
+    const collectionId = req.params.collectionId
+    const result = await updateUserCollection(collectionId, updateData)
+    if (result)
+      res.status(200).send({
+        message: "User has been updated",
+        data: updateData
+      })
+  },
+  removeCollection: async (req, res, next) => {
+    const collectionId = req.params.collectionId
+    const response = await removeUserCollection(collectionId)
+    if (response) res.status(200).send({})
   }
 }
 module.exports = CollectionController

@@ -12,7 +12,7 @@ module.exports = passport => {
   passport.use(
     new JwtStrategy(opts, (payload, done) => {
       console.log("Reached", payload)
-      User.findOne({ email: payload.email })
+      User.findOne({ email: payload.userEmail })
         .then(user => {
           console.log("Here", user)
           return done(null, user)

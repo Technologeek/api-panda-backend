@@ -1,6 +1,6 @@
 const Collection = require("../../models/collectionModel")
+const User = require("./../../models/userModel")
 const ObjectID = require("mongodb").ObjectID
-const mongoose = require("mongoose")
 
 const createNewCollection = async (
   user_id,
@@ -14,39 +14,48 @@ const createNewCollection = async (
   req,
   next
 ) => {
-  const createCollectionQuery = await new Promise((resolve, reject) => {
+  await new Promise((resolve, reject) => {
     let CollectionModel = new Collection({
-      user_id: user_id,
-      collectionname: collectionname,
-      description: description,
-      url: url,
-      method: method,
-      urls: urls,
-      imageDetails: imageDetails
+      user_id,
+      collectionname,
+      description,
+      url,
+      method,
+      urls,
+      imageDetails
     })
-    CollectionModel.save((error, response) => {
-      if (error) {
-        return reject(next(error))
-      }
-      resolve(res.status(200).send(JSON.stringify(response)))
-    })
+    Promise.all([CollectionModel.save(), User.findById(user_id)])
+      .then(([response, user]) => {
+        const collectionId = response._id
+        user.collections.push(collectionId)
+        return user.save()
+      })
+      .then(data => resolve(res.status(200).send(JSON.stringify(data))))
+      .catch(error => reject(next(error)))
   })
-  return createCollectionQuery
 }
 
-const readUserCollection = async (user_id, res, req, next) => {
-  const readUserCollectionsQuery = await new Promise((resolve, reject) => {
-    Collection.find({ user_id }).exec((error, collections) => {
-      if (error) {
-        return reject(next(error))
-      }
-      let dataToReturn = {
-        count: collections.length,
-        collections: collections
-      }
-      resolve(res.status(200).send(JSON.stringify(dataToReturn)))
-    })
+const readUserCollection = async (user_id, res, req, next, query) => {
+  const { limit = 10, skip = 0 } = query
+  delete query.limit
+  delete query.skip
+  await new Promise((resolve, reject) => {
+    Collection.find({ user_id: ObjectID(user_id), ...query }, {})
+      .limit(parseInt(limit))
+      .skip(parseInt(skip))
+      .then(data => resolve(res.status(200).send(JSON.stringify(data))))
   })
-  return readUserCollectionsQuery
 }
-module.exports = { createNewCollection, readUserCollection }
+const updateUserCollection = async (collectionId, data) => {
+  return Collection.findOneAndUpdate({ _id: ObjectID(collectionId) }, data)
+}
+
+const removeUserCollection = async collectionId => {
+  return Collection.findById(collectionId).remove()
+}
+module.exports = {
+  createNewCollection,
+  readUserCollection,
+  updateUserCollection,
+  removeUserCollection
+}

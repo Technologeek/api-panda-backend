@@ -1,6 +1,9 @@
-const boom = require("express-boom")
 const errorHandler = (err, req, res, next) => {
-  res.boom.badRequest("Validation didn't suceed")
   console.log(err.stack)
+  if (err && err.errors && err.errors.username) {
+    res.status(400).send(err)
+  } else {
+    res.status(500).send(err)
+  }
 }
 module.exports = errorHandler

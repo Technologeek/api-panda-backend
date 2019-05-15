@@ -3,14 +3,18 @@ const mongoose = require("mongoose"),
   uniqueValidator = require("mongoose-unique-validator"),
   { comparePasswordHash } = require("../utils/hashPassword")
 const bcrypt = require("bcrypt")
-const CollectionSchema = require("../models/collectionModel")
 
-//User=Schema
 const UserSchema = new Schema(
   {
     username: { type: String, required: true, max: 100, unique: true },
     email: { type: String, required: true },
-    password: { type: String, required: true }
+    password: { type: String, required: true },
+    collections: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Collections"
+      }
+    ]
   },
   {
     timestamps: true

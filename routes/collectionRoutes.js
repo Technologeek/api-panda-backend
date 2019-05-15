@@ -4,20 +4,16 @@ const express = require("express"),
   passport = require("passport")
 require("../middlewares/passport")(passport)
 
-router.post(
-  "/userid/collections",
+router.put(
+  "/:collectionId",
   passport.authenticate("jwt", { session: false }),
-  CollectionController.createNewCollection
+  CollectionController.updateCollection
 )
 
-router.get(
-  "/recent_collections",
-  passport.authenticate("jwt", { session: false })
+router.delete(
+  "/:collectionId",
+  passport.authenticate("jwt", { session: false }),
+  CollectionController.removeCollection
 )
 
-router.get(
-  "/:userid/collections",
-  passport.authenticate("jwt", { session: false }),
-  CollectionController.readAllUserCollections
-)
 module.exports = router

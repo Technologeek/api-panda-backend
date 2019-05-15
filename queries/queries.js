@@ -48,12 +48,12 @@ const loginExistingUser = async (email, password, res, req, next) => {
       user.comparePassword(password, (error, isMatch) => {
         if (error) {
           console.log(error)
-          return reject(boom.unauthorized("invalid password"))
+          return reject(res.status(403).json({ error: "Invalid Credentials" }))
         }
         if (isMatch) {
           let userDetails = {
-            email: email,
-            password: password
+            userID: user._id,
+            userEmail: user.email
           }
           const generatedToken = jwt.sign(
             userDetails,
@@ -66,6 +66,7 @@ const loginExistingUser = async (email, password, res, req, next) => {
             }
           )
           let responseToSend = {
+            user_id: user._id,
             token: generatedToken
           }
           resolve(res.status(200).send(JSON.stringify(responseToSend)))
