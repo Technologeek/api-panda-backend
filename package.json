@@ -9,7 +9,8 @@
     "serve": "node dist/server.js",
     "test": "NODE_ENV=test mocha --require @babel/register --require babel-polyfill -recursive --exit --timeout 120000",
     "generateTestReport": "NODE_ENV=test mocha  --require @babel/register --require babel-polyfill 'test/**/*.js' --reporter mochawesome --reporter-options output=report.html --exit --timeout 120000",
-    "coverage": "nyc --reporter html --reporter text npm test"
+    "coverage": "nyc --reporter html --reporter text npm test",
+    "heroku-postbuild": "nodemon --exec babel-node server/server.js"
   },
   "author": "Rahul Patil",
   "license": "ISC",
@@ -30,6 +31,7 @@
     "mongoose": "^5.5.2",
     "mongoose-unique-validator": "^2.0.3",
     "morgan": "^1.9.1",
+    "newrelic": "^5.8.0",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "supertest": "^4.0.2",
