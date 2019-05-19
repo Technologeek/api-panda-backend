@@ -7,8 +7,8 @@
     "start": "nodemon --exec babel-node server/server.js",
     "build": "babel src --out-dir dist",
     "serve": "node dist/server.js",
-    "test": "NODE_ENV=test mocha --require @babel/register --require babel-polyfill -recursive --exit",
-    "generateTestReport": "NODE_ENV=test mocha  --require @babel/register --require babel-polyfill 'test/**/*.js' --reporter mochawesome --reporter-options output=report.html --exit",
+    "test": "NODE_ENV=test mocha --require @babel/register --require babel-polyfill -recursive --exit --timeout 120000",
+    "generateTestReport": "NODE_ENV=test mocha  --require @babel/register --require babel-polyfill 'test/**/*.js' --reporter mochawesome --reporter-options output=report.html --exit --timeout 120000",
     "coverage": "nyc --reporter html --reporter text npm test"
   },
   "author": "Rahul Patil",
