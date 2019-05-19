@@ -4,3 +4,8 @@ node_js:
 cache:
   directories:
     - "node_modules"
+deploy:
+  provider: heroku
+  api_key:
+    secure: "01381c18-228b-4fca-b47d-d602c25c5272"
+  app: "Api-Panda-Backend"
