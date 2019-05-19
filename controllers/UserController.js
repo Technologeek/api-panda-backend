@@ -16,6 +16,17 @@ const UserController = {
     let { email, password } = body
     const response = await queries.loginExistingUser(email, password)
     return response
+  },
+
+  getUserInformation: async ({ params }) => {
+    const { userid } = params
+    let query = params
+    if (userid) {
+      query._id = query.userid
+      delete query.userid
+    }
+    const response = (await queries.getUserInformation(query)) || {}
+    return response
   }
 }
 module.exports = UserController

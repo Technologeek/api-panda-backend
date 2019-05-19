@@ -8,7 +8,7 @@
     "build": "babel src --out-dir dist",
     "serve": "node dist/server.js",
     "test": "mocha --require @babel/register --require babel-polyfill -recursive",
-    "generateTestReport": "mocha 'test/**/*.js' --reporter mochawesome --reporter-options output=report.html",
+    "generateTestReport": "mocha  --require @babel/register --require babel-polyfill 'test/**/*.js' --reporter mochawesome --reporter-options output=report.html",
     "coverage": "nyc --reporter html --reporter text npm test"
   },
   "author": "Rahul Patil",

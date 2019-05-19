@@ -47,4 +47,9 @@ const loginExistingUser = async (email, password) => {
   }
   throw new Error("Incorrect Password")
 }
-module.exports = { createNewUser, loginExistingUser }
+
+const getUserInformation = async payload => {
+  const userInformation = await User.findOne(payload)
+  return userInformation
+}
+module.exports = { createNewUser, loginExistingUser, getUserInformation }
