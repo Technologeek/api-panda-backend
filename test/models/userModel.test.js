@@ -9,7 +9,7 @@ describe("testing User Schema Model", function() {
     const userObject = new User({
       username: "testing",
       email: "testing@test.com",
-      password: "rahulsinha"
+      password: "rahulpatil"
     })
     userObject.validate(function(error, data) {
       expect(error).to.equal(null)

@@ -27,7 +27,7 @@ describe("testing User collection end 2 end integration test", function() {
     }
     rightUserName = "alfred!@#"
     rightPassword = "Rahul@1234511"
-    rightEmail = "rahulanandsinha@gmail.com"
+    rightEmail = "rahulanandpatil@gmail.com"
     collectionBody = {
       collectionname: "rahul",
       method: "get",

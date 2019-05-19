@@ -22,7 +22,7 @@ describe("testing User Schema Model", function() {
   it("should test registerNewUser function", async function() {
     const body = {
       username: "rahul",
-      email: "rahulanandsinha@gmail.com",
+      email: "rahulanandpatil@gmail.com",
       password: "password"
     }
     const encryptedString = "randomString"
@@ -42,7 +42,7 @@ describe("testing User Schema Model", function() {
   })
   it("should test loginNewUser function", async function() {
     const body = {
-      email: "rahulanandsinha@gmail.com",
+      email: "rahulanandpatil@gmail.com",
       password: "password"
     }
     const userResponse = {
