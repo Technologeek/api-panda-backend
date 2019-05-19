@@ -1,4 +1,5 @@
-import "dotenv/config"
+require("dotenv").config()
+
 const connectToDb = require("../config/dbConfig")
 const errorHandler = require("../middlewares/errorHandler"),
   logger = require("../middlewares/logger"),
@@ -72,3 +73,4 @@ connectToDb().then(async () => {
 })
 
 app.use(errorHandler)
+module.exports = app

@@ -6,11 +6,14 @@ const CollectionImageSchema = new Schema({
   url: { type: String, required: true }
 })
 const CollectionSchema = new Schema({
-  collectionname: { type: String, required: true },
+  collectionname: {
+    type: String,
+    required: [true, "Collection Name is Required"]
+  },
   description: { type: String, required: true },
   user_id: {
     type: String,
-    required: true,
+    required: [true, "UserId is Required"],
     ref: "User"
   },
   url: { type: String },
@@ -24,4 +27,11 @@ const CollectionSchema = new Schema({
   imageDetails: [CollectionImageSchema]
 })
 
-module.exports = mongoose.model("Collections", CollectionSchema)
+/*
+ Please refer 
+  https://stackoverflow.com/questions/19051041/cannot-overwrite-model-once-compiled-mongoose
+  for these lines
+ */
+
+module.exports =
+  mongoose.models.Collections || mongoose.model("Collections", CollectionSchema)

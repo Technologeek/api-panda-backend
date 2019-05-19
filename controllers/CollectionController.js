@@ -1,50 +1,13 @@
-const { body, validationResult } = require("express-validator/check")
 const {
-  createNewCollection,
-  readUserCollection,
-  updateUserCollection,
-  removeUserCollection
+  searchCollection,
+  getCollectionById,
+  getRecentCollection
 } = require("../queries/Collections")
 
+const queries = require("./../queries/Collections")
+
 const CollectionController = {
-  validate: method => {
-    switch (method) {
-      case "createNewCollection": {
-        return [
-          body("username", "UserName must be unqiue & not empty").exists(),
-          body("email", "Invalid email Format")
-            .exists()
-            .isEmail(),
-          body(
-            "password",
-            "Password must be min 8 char long,have one uppercase,one lower case and one special character."
-          )
-            .exists()
-            .matches(
-              /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/,
-              "i"
-            )
-        ]
-      }
-      case "loginUser": {
-        return [
-          body("email", "Invalid email Format")
-            .exists()
-            .isEmail(),
-          body(
-            "password",
-            "Password must be min 8 char long,have one uppercase,one lower case and one special character."
-          )
-            .exists()
-            .matches(
-              /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/,
-              "i"
-            )
-        ]
-      }
-    }
-  },
-  createNewCollection: async (req, res, next) => {
+  createNewCollection: async ({ body }) => {
     let {
       user_id,
       collectionname,
@@ -53,39 +16,59 @@ const CollectionController = {
       method,
       urls,
       imageDetails
-    } = req.body
-    await createNewCollection(
+    } = body
+    const response = await queries.createNewCollection(
       user_id,
       collectionname,
       description,
       url,
       method,
       urls,
-      imageDetails,
-      res,
-      req,
-      next
+      imageDetails
     )
+    return response
   },
-  readAllUserCollections: async (req, res, next) => {
-    let user_id = req.params.userid
-    const query = req.query
-    await readUserCollection(user_id, res, req, next, query)
+  readAllUserCollections: async ({ params }) => {
+    let { userid } = params
+    const userData = await queries.readUserCollection(userid)
+    return userData
   },
-  updateCollection: async (req, res, next) => {
-    const updateData = req.body
-    const collectionId = req.params.collectionId
-    const result = await updateUserCollection(collectionId, updateData)
-    if (result)
-      res.status(200).send({
-        message: "User has been updated",
-        data: updateData
-      })
+  updateCollection: async ({ body, params }) => {
+    const { collectionId } = params
+    const result = await queries.updateUserCollection(collectionId, body)
+    return {
+      message: "Collection has been updated",
+      data: result
+    }
   },
-  removeCollection: async (req, res, next) => {
-    const collectionId = req.params.collectionId
-    const response = await removeUserCollection(collectionId)
-    if (response) res.status(200).send({})
+  removeCollection: async ({ params }) => {
+    const { collectionId } = params
+    const response = await queries.removeUserCollection(collectionId)
+    return response
+  },
+  searchCollection: async ({ params }) => {
+    const { userid, searchText } = params
+    const searchObject = {
+      collectionname: {
+        $regex: searchText,
+        $options: "i"
+      }
+    }
+    if (userid) searchObject.user_id = userid
+    const searchResult = await searchCollection(searchObject)
+    return searchResult
+  },
+  collectionById: async ({ params }) => {
+    const { collectionId } = params
+    const result = await getCollectionById(collectionId)
+    return result
+  },
+  recentCollection: async ({ param = {} }) => {
+    const { userId } = param
+    const recentCollection = {}
+    if (userId) recentCollection.user_id = userId
+    const result = await getRecentCollection(recentCollection)
+    return result
   }
 }
 module.exports = CollectionController

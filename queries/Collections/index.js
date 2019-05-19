@@ -9,53 +9,65 @@ const createNewCollection = async (
   url,
   method,
   urls,
-  imageDetails,
-  res,
-  req,
-  next
+  imageDetails
 ) => {
-  await new Promise((resolve, reject) => {
-    let CollectionModel = new Collection({
-      user_id,
-      collectionname,
-      description,
-      url,
-      method,
-      urls,
-      imageDetails
-    })
-    Promise.all([CollectionModel.save(), User.findById(user_id)])
-      .then(([response, user]) => {
-        const collectionId = response._id
-        user.collections.push(collectionId)
-        return user.save()
-      })
-      .then(data => resolve(res.status(200).send(JSON.stringify(data))))
-      .catch(error => reject(next(error)))
+  let CollectionModel = new Collection({
+    user_id,
+    collectionname,
+    description,
+    url,
+    method,
+    urls,
+    imageDetails
   })
+  let [response, user] = await Promise.all([
+    CollectionModel.save(),
+    User.findById(user_id)
+  ])
+  const collectionId = response._id
+  user.collections.push(collectionId)
+  await user.save()
+  return response
 }
 
-const readUserCollection = async (user_id, res, req, next, query) => {
-  const { limit = 10, skip = 0 } = query
-  delete query.limit
-  delete query.skip
-  await new Promise((resolve, reject) => {
-    Collection.find({ user_id: ObjectID(user_id), ...query }, {})
-      .limit(parseInt(limit))
-      .skip(parseInt(skip))
-      .then(data => resolve(res.status(200).send(JSON.stringify(data))))
-  })
+const readUserCollection = async (user_id, query = {}) => {
+  // const {
+  //   limit = 10,
+  //   skip = 0
+  // } = query
+  // delete query.limit
+  // delete query.skip
+  const collectionData = await Collection.find({ user_id: ObjectID(user_id) })
+  return collectionData
 }
 const updateUserCollection = async (collectionId, data) => {
-  return Collection.findOneAndUpdate({ _id: ObjectID(collectionId) }, data)
+  const response = await Collection.findOneAndUpdate(
+    { _id: ObjectID(collectionId) },
+    data
+  )
+  return response
 }
 
 const removeUserCollection = async collectionId => {
-  return Collection.findById(collectionId).remove()
+  const collectionResult = await Collection.findById(collectionId).remove()
+  return collectionResult
 }
+
+const searchCollection = data => Collection.find(data)
+
+const getCollectionById = _id => Collection.findById(_id)
+
+const getRecentCollection = async data => {
+  const response = await Collection.find(data).limit(10)
+  return response
+}
+
 module.exports = {
   createNewCollection,
   readUserCollection,
   updateUserCollection,
-  removeUserCollection
+  removeUserCollection,
+  searchCollection,
+  getCollectionById,
+  getRecentCollection
 }
