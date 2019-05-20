@@ -12,6 +12,7 @@
 
 📌 API-Panda Front-end Repo : https://github.com/Technologeek/react-assignment
 📌 API-Panda Back-end Repo : https://github.com/Technologeek/api-panda-backend
+📌 API-Panda Postman Collection : https://www.getpostman.com/collections/c9c83a1f6f459ca967ff
 
 ❗️ Note : The documentation for each part will be located in their respective ReadMe files in the root directory of the repos.
 
@@ -65,12 +66,12 @@ Below is the brief description of every module in the directory.
 
 - 🔘 : Routes : Contains routes classified by the route-type and an index route. The primary motive while designing the route was to keep the routes clean and seperate all the business/application logic from the routes. For instance, a route with authentication will look like:
 
-<!-- ````router.get(
+````router.get(
   "/username/:username",
   passport.authenticate("jwt", { session: false }),
   promiseResolver(userController.getUserInformation),
   responseSender
-)``` -->
+)```
 
 - 🔘 : Server : Defines the entry point of the application.
 
@@ -154,7 +155,7 @@ To run the project locally,
 
 ## Data Model Design.
 
-![Data Model MongoDb](https://github.com/Technologeek/react-assignment/blob/master/Untitled%20Diagram.png)
+![Data Model MongoDb](https://res.cloudinary.com/doefdz9w7/image/upload/v1558391378/Api-panda/Untitled_Diagram_1.png)
 
 ## Application Configuration
 
@@ -165,7 +166,7 @@ PORT = 3000
 JWT_ENCRYPTION_KEY = YourEncryptionKey
 JWT_EXPIRATION_TIME = 10000
 DB_URL = your_db_server_url_goes-here
-```
+````
 
 ## Security and Authentication
 
