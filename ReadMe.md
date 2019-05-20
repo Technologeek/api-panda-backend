@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Technologeek/api-panda-backend.svg?branch=master)](https://travis-ci.org/Technologeek/api-panda-backend)
+
 # Assignment 2 - MERN Application
 
 🔸 _Web-Application Name_ : API-Panda-Backend  
@@ -120,17 +122,13 @@ Below is the brief description of every module in the directory.
 
 ## Installation requirements.
 
-This application is bootstrapped using [Create-React-App](https://github.com/facebook/create-react-app) uses [Json Server](https://github.com/typicode/json-server) for data persistance and [FireBase](https://firebase.google.com/) for authentication/session-management.
-
-> Note : The project deployed live uses a back-end which is also deployed on AWS cloud. Meaning, the JSON-server is deployed on AWS instance which can be accessed both locally and on the live version. The EC2 Server URL is http://ec2-18-203-87-253.eu-west-1.compute.amazonaws.com:3000/users [Due to CORS & SSL browser policies, this had to be replaced.]
-
-The Live Project URL is : https://api-panda-75znvivjk.now.sh/ [Might Be Updated Later]
+This application is packaged for development & deployment builds with proper environment configurations. To use the application end-points, the live version should be used - https://api-panda-backend-server.herokuapp.com as it comes pre-configured with a mongoDb instance that is deployed to a Cloud.
 
 To run the project locally,
 
 1. Git clone this repository
-   `git clone https://github.com/Technologeek/react-assignment.git`
-   Cd into **react-assignment**
+   `git clone https://github.com/Technologeek/api-panda-backend.git`
+   Cd into **api-panda-backend**
 2. Ensure you've Node/Npm/Yarn installed to download the dependencies. The project uses following versions.
    - Node : v8.12.0
    - NPM : 6.4.1
@@ -138,150 +136,145 @@ To run the project locally,
 3. It is recommended to use Yarn for downloading all the dependencies. But in it's absence, NPM would do the job. Perform the following commands from inside the project folder (directory where package.json is located)
    `yarn install` or `npm install`
 
-4. Once the dependencies are downloaded, you can run the development project server by `npm start` . This should run the application on one of the available ports and the browser will be directed towards that port.
+4. Once the dependencies are downloaded, you can run the development project server by `npm start` . This should run the application on port 3000.
 
 5. The environment variables file needs to be created manually (.env) and the data for the same will be sent to via slack. You can copy,paste that data and re-run the application to get the enviroment varibales working.
 
-6. JSON-Server will be needed to run the database. Install the JSON server by running `npm install -g json-server` . Note that the Front-end of the appplication runs in isolation with the backend. A sort of an isomorphic aproach. To install the back-end database,
+6. You need to configure the mongoDb url-string to point towards your local running instance or use the default that is the one deployed to the cloud.
 
-- Clone this repository `https://github.com/Technologeek/react-json-server.git`
-- Cd into react-json-server and run `npm install` (downloads any other dependencies required by the server)
-- Run `npm start` - This should start the JSON-Server serving the data-file user-collection.json. The default port should be 3000 but if JSON-Server runs on another port than you must change the port accordingly in your Front-end app's env file.
+7. Other commands are listed below
+   `npm run start` - Starts the development server (uses nodemon).
+   `npm run build` - Generates the Production build of the application in the dist folder.
+   `npm run serve` - Serves the Production build of the application.
+   `npm run test` - Initiates a test runner to run all the tests in parallel.
+   `npm run generateTestReport` - Generates a test report in mochaawesome-report folder.
+   `npm run coverage` - Generates test coverage report in the terminal.
 
-7. By now you should have your API-Panda app and Json-Server running on seperate ports which will make app ready to be used.
-8. The default login details for an existing user-account are
-   - Email : test@testapipanda.com
-   - Password : 12345678Aa
-9. Should you wish to run the React-StoryBook, you can do so by running `npm run storybook` .If npm throws an dependencies error than you have to manually inject story book in **CRA** by running `npx -p @storybook/cli sb init` and then doing a `npm install` to patch the dependencies.
+8. If the above steps executed accurately, you'll have a server running locally as expected. Post-Man collection (linked above) can be used to test the API.
 
 ## Data Model Design.
 
-Application Architecture
+![Data Model MongoDb](https://github.com/Technologeek/react-assignment/blob/master/Untitled%20Diagram.png)
 
-![Component & Architecture Model](https://github.com/Technologeek/react-assignment/blob/master/Application%20Architecture.png)
+## Application Configuration
 
-![Data Model FireBase & JSON](https://github.com/Technologeek/react-assignment/blob/master/Untitled%20Diagram.png)
+A .env file needs to be created in the root directory of the project with the following configurations.
 
-## App Component Design.
+```bash
+PORT = 3000
+JWT_ENCRYPTION_KEY = YourEncryptionKey
+JWT_EXPIRATION_TIME = 10000
+DB_URL = your_db_server_url_goes-here
+```
 
-A screenshot showing the component stories from Storybook
-![Component Stories](https://github.com/Technologeek/react-assignment/blob/master/Stories.png)
+## Security and Authentication
 
-I tried to write stories for as much as components as possible but few of them won't really work well with the UI library
-and my chosen architecture approach. For instance, I don't have any button component which would take props and behave dynamically. My other components which take data from the store as props needed to be exported twice (once in redux's connect and then other manual export) so Storybook finds them. This is not a proper approach since I'm making changes to my code-base so storybook renders data. In Enterprise level appliactions, this can have breaking changes. However, it makes sense to write stories and then develop components alongside, a sort of CDD (Component Driven Development) approach. The ApiDisplay component wouldn't render because storybook needs to access store. I've left that component in Error State in the stories so you can see the incompatability issues.
+- 🔘 : API-Panda backend uses JWT based authentication along with passport for verification. Once the token is generated, the subsequent requests expect the same to be passed in the request header as a bearer token.
 
-## UI Design.
+- 🔘 : The token then is verified before processing the request.
 
-The App is tested on Google-Chrome and the CSS is styled according to media-queries : with respect a 13inch monitor (1140px).Mobile responsiveness is not implemented as it's out of the scope for this assignment. Some of the app's screenshots.
+- 🔘 : Every route in the application is protected except _api/user/signup_, _/api/user/login_, _/api/quote_, _/api/health_
 
-- HomePage
-  ![HomePage](https://res.cloudinary.com/doefdz9w7/image/upload/v1553033198/Api-panda/Screenshot_2019-03-19_at_22.06.19.png)
+## Testing Strategies
 
-- SignupModal
-  ![SignupModal](https://res.cloudinary.com/doefdz9w7/image/upload/v1553025905/Api-panda/Screenshot_2019-03-19_at_19.45.19.png)
+- 🔘 : 'test' folder contains the test for all the components in the project. It will conduct two type of test- Integration Test, Unit Test, and end-to-end testing for one of the flows. The test are run through mocha and assertion are made through chai
 
-- LoginModal
-  ![LoginModal](https://res.cloudinary.com/doefdz9w7/image/upload/v1553025900/Api-panda/Screenshot_2019-03-19_at_19.45.41.png)
+- 🔘 : Integration Test
+  Integration Test is placed in e2e folder. Integration test run through chai-http package. It also provides us the capability of spawning new Server at the destined port and then running all the test.
+  The test includes -
 
-- Dashboard
-  ![Dashboard](https://res.cloudinary.com/doefdz9w7/image/upload/v1553025907/Api-panda/Screenshot_2019-03-19_at_19.48.14.png)
+Registering New User
+Login User with the above credentials
+Make a collection
+Read a collection
+Update a collection
+Delete collection
+All the corner cases in which the api should return an error are also covered. The major case of unauthorized user and the validation tests are also covered in this tests.
+We have also use mockgoose which mimics the mongo db server and keeps the data in memory. The main advantage for using mockgoose is that every time test runs we get new set of database to run the test into.
 
-- Collections
-  ![User Collections](https://res.cloudinary.com/doefdz9w7/image/upload/v1553025893/Api-panda/Screenshot_2019-03-19_at_19.55.25.png)
+- 🔘 : Unit Test
+  All other folder includes the unit test for the respective modules. We have used sinon for making spies, stubbing and mocking function so that we can run the test in isolation. The main focus of the test is to mock each and every function so that the test scope can be narrowed.
 
-- Create new Collection
-  ![Create Collection](https://res.cloudinary.com/doefdz9w7/image/upload/v1553026385/Api-panda/Screenshot_2019-03-19_at_20.12.15.png)
+Simarly, models, schemas are also tested.
 
-- Default Collection
-  ![Default Collection](https://res.cloudinary.com/doefdz9w7/image/upload/v1553025903/Api-panda/Screenshot_2019-03-19_at_19.50.47.png)
+- 🔘 : Below are screenshots of the tests ran [40 tests in total along with test coverage, and report ]
 
-- ToolTip
-  ![Tool-Tip](https://res.cloudinary.com/doefdz9w7/image/upload/v1553025898/Api-panda/Screenshot_2019-03-19_at_19.51.59.png)
+![Total Tests](https://res.cloudinary.com/doefdz9w7/image/upload/v1558390156/Api-panda/Screenshot_2019-05-20_at_23.01.10.png)
+![Total Tests](https://res.cloudinary.com/doefdz9w7/image/upload/v1558390133/Api-panda/Screenshot_2019-05-20_at_23.08.00.png)
+![Total Tests](https://res.cloudinary.com/doefdz9w7/image/upload/v1558390138/Api-panda/Screenshot_2019-05-20_at_23.07.10.png)
+![Total Tests](https://res.cloudinary.com/doefdz9w7/image/upload/v1558390133/Api-panda/Screenshot_2019-05-20_at_23.08.00.png)
+![Total Tests](https://res.cloudinary.com/doefdz9w7/image/upload/v1558390141/Api-panda/Screenshot_2019-05-20_at_23.04.45.png)
+![Total Tests](https://res.cloudinary.com/doefdz9w7/image/upload/v1558390129/Api-panda/Screenshot_2019-05-20_at_23.07.48.png)
+![Coverage Report](https://res.cloudinary.com/doefdz9w7/image/upload/v1558390157/Api-panda/Screenshot_2019-05-20_at_23.05.21.png)
 
-- Request
-  ![Request](https://res.cloudinary.com/doefdz9w7/image/upload/v1553025903/Api-panda/Screenshot_2019-03-19_at_19.50.47.png)
+## CI/CD Pipeline
 
-- Accordin View
-  ![Accordin View](https://res.cloudinary.com/doefdz9w7/image/upload/v1553025893/Api-panda/Screenshot_2019-03-19_at_19.55.25.png)
+- 🔘 : API-Panda backend uses a Travis CI build process to run the build, verify all tests are passing and then deploy the error free application to Heroku. The free Heroku plan is limited to just couple of builds so instead I've used Heroku's Automatic deploy feature where every successful build from Travis will trigger a auto-deployment in Heroku from the specified branch.
 
-- Form Request
-  ![Response](https://res.cloudinary.com/doefdz9w7/image/upload/v1553025896/Api-panda/Screenshot_2019-03-19_at_19.53.45.png)
+- 🔘 : The current build status of the Application from Travis is highlighted in the GitHub's ReadMe File.
 
-- Search
-  ![Search](https://res.cloudinary.com/doefdz9w7/image/upload/v1553025895/Api-panda/Screenshot_2019-03-19_at_19.51.36.png)
+- 🔘 : ProcFile is used to tell Heroku to run a command after building the dist folder. In our case, it is `npm run serve`.
 
-- Profile
-  ![Profile](https://res.cloudinary.com/doefdz9w7/image/upload/v1553025893/Api-panda/Screenshot_2019-03-19_at_19.54.11.png)
+- 🔘 : Below are the screenshots for the Travis and Heroku builds.
+  ![Travis Build](https://res.cloudinary.com/doefdz9w7/image/upload/v1558381162/Api-panda/Screenshot_2019-05-20_at_20.39.04.png)
+  ![Heroku Build](https://res.cloudinary.com/doefdz9w7/image/upload/v1558381351/Api-panda/Screenshot_2019-05-20_at_20.42.16.png)
 
-- AboutMe
-  ![About](https://res.cloudinary.com/doefdz9w7/image/upload/v1553025910/Api-panda/Screenshot_2019-03-19_at_19.54.27.png)
+## Extra features
+
+- 🔘 Analytics : API-Panda uses NewRelic APM to check the applications performence measures. New-Relic APM records all the activities on the application including the network errors, response times, 404's, database, service maps, transactions etc to give useful insights in form of visualizations on the dashboard. These visualizations can help in determining which API is taking long time to respond or what are the common causes of error and other similar use-cases. New Relic is currently one of the most widely used analytics system for the Node.js applications.
+
+![New Relic](https://res.cloudinary.com/doefdz9w7/image/upload/v1558381553/Api-panda/Screenshot_2019-05-20_at_20.45.36.png)
+
+- 🔘
 
 ## Libraries Used
 
-- 🔹[ReactJs](https://reactjs.org/)
-- 🔹[Redux](https://redux.js.org/)
-- 🔹[React-Redux](https://github.com/reduxjs/react-redux)
-- 🔹[React-Router](https://github.com/ReactTraining/react-router)
-- 🔹[React-Connected-Router](https://github.com/supasate/connected-react-router) : To keep the routes in-synch with the redux store.
-- 🔹[Redux-Thunk](https://github.com/reduxjs/redux-thunk)
-- 🔹[Redux-Persist](https://github.com/rt2zz/redux-persist) : To persist the redux store in the brower's cache storage.
-- 🔹[React-Storybook](https://github.com/storybooks/storybook)
-- 🔹[Validator](https://www.npmjs.com/package/validator) : Provides validation utility functions.
-- 🔹[Prettier](https://github.com/prettier/prettier) : Code formatting.
-- 🔹[ES-Lint](https://eslint.org/) : Code Linting.
+- 🔹[express](https://expressjs.com/)
+- 🔹[express-validation](https://express-validator.github.io/docs/)
+- 🔹[express-boom](https://www.npmjs.com/package/express-boom) : Pretty Format Errors with custom Error messages.
+- 🔹[body-parser](https://github.com/expressjs/body-parser)
+- 🔹[cors](https://expressjs.com/en/resources/middleware/cors.html) : To allow cross orgin scripts.
+- 🔹[jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
+- 🔹[mockgoose](https://www.npmjs.com/package/mockgoose) : Mocking models for testing.
+- 🔹[mongoose](https://mongoosejs.com/)
+- 🔹[mongoose-unique-validator](https://github.com/blakehaswell/mongoose-unique-validator/)
 - 🔹[Husky](https://github.com/typicode/husky) : Pre-Commit Utility.
 - 🔹[ES-Lint](https://eslint.org/) : Code Linting.
-- 🔹[Styled-Components](https://www.styled-components.com/) : CSS in JS based styling liblary.
-- 🔹[Axios](https://github.com/axios/axios) : Promise based HTTP client.
-- 🔹[Now.sh](https://www.npmjs.com/package/now) : Deployment Package for node applications.
-
-#### Third Party React Web Components
-
-- 🔹[React-Tooltip](https://www.npmjs.com/package/react-tooltip) : Fancy React Tool-Tips
-- 🔹[React-UI_Avatar](https://www.npmjs.com/package/react-ui-avatars) : UI avatar generator component.
-- 🔹[React-JSON-Pretty](https://www.npmjs.com/package/react-json-pretty) : Prettyfies JSON array.
-- 🔹[Semantic UI React](https://react.semantic-ui.com/) : Component Based Styling library.
-- 🔹[React Story-Book Console](https://github.com/storybooks/storybook-addon-console) : Storybook Addon to log console data in stories.
-- 🔹[React Story-Book Knobs](https://www.npmjs.com/package/@storybook/addon-knobs) : To add props to stories dynamically.
+- 🔹[eslint-config-airbnb-base](https://www.npmjs.com/package/eslint-config-airbnb-base)
+- 🔹[morgan](https://github.com/expressjs/morgan) : Logging.
+- 🔹[newrelic](https://www.npmjs.com/package/newrelic) : New Relic Analytics
+- 🔹[winston](https://www.npmjs.com/package/winston) : Beautified Console Logs.
+- 🔹[request](https://www.npmjs.com/package/request) : Making external http/https calls.
+- 🔹[supertest](https://github.com/visionmedia/supertest)
+- 🔹[chai](https://www.npmjs.com/package/chai)
+- 🔹[chai-http](https://www.npmjs.com/package/chai-http)
+- 🔹[mocha](https://mochajs.org/)
+- 🔹[mochawesome](https://www.npmjs.com/package/mochawesome)
+- 🔹[sinon](https://www.npmjs.com/package/sinon)
+- 🔹[nyc](https://www.npmjs.com/package/nyc) : Test Coverage Generator
+- 🔹[sinon](https://www.npmjs.com/package/sinon)
+- 🔹[bluebird](https://www.npmjs.com/package/bluebird) : Full Featured Promise based library
 
 #### Third Party Web API's
 
 - 🔹[Random Programming Quotes](https://quotes.stormconsultancy.co.uk/random.json) : Api to generate random quotes
-- 🔹[Json-Placeholder](https://api.myjson.com/bins/q7fh2) : Api to create a default collection
-
-## Routing.
-
-- 🚂 **/** : Index Route/HomePage of the application 👮 _Public_
-- 🚂 **/About** : About the application 👮 _Public_
-- 🚂 **/Dashboard** : User Dashboard after login/registeration. 👮 _Protected_
-- 🚂 **/:userId/Profile** : User Profile with a parameterised userId. 👮 _Protected_
-- 🚂 **/Aboutme** : Information of the developer 👮 _Public_
-- 🚩 If routes doesn't match any of the above routes then you're redirected to a **RouteNotFound** component which displays a 404 Error Page.
 
 ## Extra features
 
-- 🔘 Throwing appropriate errors on forms doing different validations. Example URL's must began with http or https to be considered it as valid.
-- 🔘 Throwing appropriate errors when back-end validation fails example invalid password.
-- 🔘 Showing a fancy loader CSS animation until a network request/response are completed.
-- 🔘 Integrated React ErrorBoundaries component to catch the errors on top of the app and in the components that have tendency to break the page due to network/JavaScript errors. For instance mapping over data that is undefined.
-- 🔘 Caching data like UserId/User-Session for persistance.
-- 🔘 Base styles are self written using styled-components and some default CSS in the Semantic UI react is overridden with self written css.
-- 🔘 Showing appropriate message if the collection list is empty.
+- 🔘 Validating on the front-end, and back-end express level before data hits the databse to avoid unnesessay delay.
+- 🔘 Using CORS to allow secure access from the browser.
+- 🔘 Pretty formatted logging on the console every request along with the request's status code and the response time.
+- 🔘 Using NYC to generate detail test coverage reports in the console.
+- 🔘 The application uses full-fledged promise based asynchronous architecture that non-blocking.
+- 🔘 Application uses Comprehensive testing strategies from unit, integration to end-to-end tests including mocking.
+- 🔘 The written architecture is production ready and can be scaled as needed. I've ran load tests from an external service comprising of 1000 requests from different origins per second and application performs normally in these conditions.
 
 ## Independent learning.
 
-- 💡 I've used **React.PureComponent** for effective optimised rendering for the CollectionListUser component. I could have used shouldComponentUpdate() but I don't really need to do a deep props comparision and PureComponent implements shouldComponentUpdate() with shallow props & state comparision which satisfies my requirement.
+- 💡 I've designed the entire architecture myself by taking a few references into consideration.
 - 💡 ApiDisplay was the most trickiest component to write because it receives form data from the state which is used to make a request and show Error/Response <div>'s accordingly but at the same time it should receive data directly on Url-Click from **UrlAccordin** component and show the appropriate responses. My ideology behind writing every component is **Single Responsibility Principle & High Reusability**. The way I made it work is using an action creator from props but still I think the code is kind of verbose and it could have been improved by introducing an intermediate component.
 - 💡 To enhance the developer experience, I've tried to decompose components as much as possible to avoid strong binding. ES6 features are utilized as much as possible.
 - 💡 To demonstrate React-Hooks, I've created a Quote component which uses a useState and a custom Hook to fetch & set the data. (I still prefer the good'ol classes)
 - 💡 I've added type & value checking wherever possible so the component doesn't break if it gets a null or undefined.
 - 💡 Whenever it comes to using third party libraries, I prefer avoiding them and writing my own utilities if the requirement is not too broad. For instance, instead of using react-form/redux-form, I write my own validations because it doesn't make sense to introduce a big package into your app just to validate a few inputs. Maybe developers disagree with it but being an avid JavaScript developer, I like to have more control over my code.
 - 💡 I've also added StrictMode in couple of my components which throws errors if the legacy methods and other anti-patterns are used in the application. They just run in the development mode so it's nice to have additional strict type checking along with props validation.
-
-[model]: ./data.jpg
-[image3]: ./screen.png
-[stories]: ./storybook.png
-
-```
-
-```
