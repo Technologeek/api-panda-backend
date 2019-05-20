@@ -60,11 +60,6 @@ app.use("*", function(req, res) {
   logger.info("Info statement")
 })
 
-//HealthCheck Route
-app.get("/health", (req, res) => {
-  res.send("ok")
-})
-
 //Environment Settings
 app.set("port", process.env.PORT || 3000)
 connectToDb().then(async () => {

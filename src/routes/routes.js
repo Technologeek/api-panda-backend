@@ -12,5 +12,9 @@ router.use("/auth", authRoutes)
 router.use("/collections", collectionRoutes)
 router.use("/", miscRoutes)
 router.use("/", passport.initialize())
+//HealthCheck Route
+router.get("/health", (req, res) => {
+  res.send("ok")
+})
 router.use("/", boom)
 module.exports = router
