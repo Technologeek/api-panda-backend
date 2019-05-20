@@ -1,4 +1,5 @@
 require("dotenv").config()
+require("newrelic")
 
 const connectToDb = require("../config/dbConfig")
 const errorHandler = require("../middlewares/errorHandler"),
@@ -57,6 +58,11 @@ app.use("*", function(req, res) {
   console.log(req && req.username)
   logger.debug("Debug statement")
   logger.info("Info statement")
+})
+
+//HealthCheck Route
+app.get("/health", (req, res) => {
+  res.send("ok")
 })
 
 //Environment Settings
