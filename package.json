@@ -4,17 +4,17 @@
   "description": "Back-End for API-Panda",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon --exec babel-node server/server.js",
+    "start": "nodemon --exec babel-node src/server/server.js",
     "build": "babel src --out-dir dist",
-    "serve": "node dist/server.js",
-    "test": "NODE_ENV=test mocha --require @babel/register --require babel-polyfill -recursive --exit --timeout 120000",
-    "generateTestReport": "NODE_ENV=test mocha  --require @babel/register --require babel-polyfill 'test/**/*.js' --reporter mochawesome --reporter-options output=report.html --exit --timeout 120000",
-    "coverage": "nyc --reporter html --reporter text npm test",
-    "heroku-postbuild": "nodemon --exec babel-node server/server.js"
+    "serve": "node dist/server/server.js",
+    "test": "NODE_ENV=test mocha 'src/test/**/*.js' --require @babel/register --require babel-polyfill -recursive --exit --timeout 120000",
+    "generateTestReport": "NODE_ENV=test mocha  --require @babel/register --require babel-polyfill 'src/test/**/*.js' --reporter mochawesome --reporter-options output=report.html --exit --timeout 120000",
+    "coverage": "nyc --reporter html --reporter text npm test"
   },
   "author": "Rahul Patil",
   "license": "ISC",
   "dependencies": {
+    "@babel/runtime": "^7.4.4",
     "babel-register": "^6.26.0",
     "bcrypt": "^3.0.6",
     "bcrypt-nodejs": "0.0.3",
@@ -41,6 +41,7 @@
     "@babel/cli": "^7.4.3",
     "@babel/core": "^7.4.4",
     "@babel/node": "^7.2.2",
+    "@babel/plugin-transform-runtime": "^7.4.4",
     "@babel/preset-env": "^7.4.3",
     "@babel/register": "^7.4.4",
     "babel-core": "^7.0.0-bridge.0",
