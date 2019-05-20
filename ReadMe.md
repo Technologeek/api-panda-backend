@@ -10,9 +10,12 @@
 
 🐼 API-Panda takes an Isomorphic approach and runs the front-end isolated from the back-end in it's own container. The configuration, architecture, and deployment cycle for the front-end of the application has no depdendencies on the backend. The back-end is deployed as a standlone API which can be utilzied by any application using the provided routes. This is ideal for scaling and fits the scenario in an Enterprise where a team comprises of different front-end and back-end developers.
 
-📌 API-Panda Front-end Repo : https://github.com/Technologeek/react-assignment
-📌 API-Panda Back-end Repo : https://github.com/Technologeek/api-panda-backend
-📌 API-Panda Postman Collection : https://www.getpostman.com/collections/c9c83a1f6f459ca967ff
+📌 API-Panda Front-end Repo : https://github.com/Technologeek/react-assignment . 
+
+📌 API-Panda Back-end Repo : https://github.com/Technologeek/api-panda-backend . 
+
+📌 API-Panda Postman Collection : https://www.getpostman.com/collections/c9c83a1f6f459ca967ff . 
+
 
 ❗️ Note : The documentation for each part will be located in their respective ReadMe files in the root directory of the repos.
 
@@ -42,22 +45,31 @@ It's important to understand the approaches taken to design the architecture. Le
 Below is the brief description of every module in the directory.
 
 - 🔘 Root of the project contains general configurations like babel, eslint, prettier, Travis and other files that will be utilized by the application on a global level.
-  ➕ EsLint : Uses the famous airbnb plugin for the industry level linting policies.
+
+  ➕ EsLint : Uses the famous airbnb plugin for the industry level linting policies. 
+  
   ➕ Babel : Configured to use the latest ES6 features and transform runtimes while creating the production build.
 
 - 🔘 Config : DataBase config goes here. This module is responsible for connecting to the Test/Production database depending on the variable received from the .env.
 
-- 🔘 Controllers : The driver programs for the business logic taking into account the other utility methods.
+- 🔘 Controllers : The driver programs for business logic taking into account the other utility methods.
 
 - 🔘 Errors : Returns a ValidationError. Further can be expanded to handle other errors in the application.
 
 - 🔘 MiddleWares : Express middleware functions responsible for taking an action on the request/response received. Further classified as
+
   ➕ coreMiddleWares.js : All global middlewares will go here.
+  
   ➕ errorHandler.js : Error handling middleware for the entire application. Will be responsible for throwing a specific error on the request received. Ideally, every error will be forwarded here by the next() callback.
+  
   ➕ logger.js : Logger for the application using winston module.
+  
   ➕ passport.js : Authentication middleware.
+  
   ➕ promiseResolver.js : MiddleWare for resolving promises as the application is highly asynchronous.
+  
   ➕ responseSender.js : General middleware for sending appropriate responses.
+  
   ➕ Validation.js : This middleware currently handles only Validation for login/sign-up but the idea is to used a centralized middleware of handle all validations.
 
 - 🔘 Models : Mongo Models/Schema of the application.
@@ -66,12 +78,14 @@ Below is the brief description of every module in the directory.
 
 - 🔘 : Routes : Contains routes classified by the route-type and an index route. The primary motive while designing the route was to keep the routes clean and seperate all the business/application logic from the routes. For instance, a route with authentication will look like:
 
-````router.get(
+```
+router.get(
   "/username/:username",
   passport.authenticate("jwt", { session: false }),
   promiseResolver(userController.getUserInformation),
   responseSender
-)```
+)
+```
 
 - 🔘 : Server : Defines the entry point of the application.
 
@@ -82,10 +96,16 @@ Below is the brief description of every module in the directory.
 - 🔘 : Validation : Contains the custom validation utilities.
 
 - 🔘 Misc
+
   ➕ combined.log : Logger file shows log messages.
+  
   ➕ new_relic_agent.log : Shows logs from new_relic analytics system.
+  
   ➕ Procfile : Heroku config.
+  
   ➕ mochaawesome-report : Test/Coverage reports.
+  
+  ➕coverage : Coverage reports generated from NYC.
 
 ## Application Features
 
@@ -145,10 +165,15 @@ To run the project locally,
 
 7. Other commands are listed below
    `npm run start` - Starts the development server (uses nodemon).
+   
    `npm run build` - Generates the Production build of the application in the dist folder.
+   
    `npm run serve` - Serves the Production build of the application.
+   
    `npm run test` - Initiates a test runner to run all the tests in parallel.
+   
    `npm run generateTestReport` - Generates a test report in mochaawesome-report folder.
+   
    `npm run coverage` - Generates test coverage report in the terminal.
 
 8. If the above steps executed accurately, you'll have a server running locally as expected. Post-Man collection (linked above) can be used to test the API.
@@ -185,11 +210,17 @@ DB_URL = your_db_server_url_goes-here
   The test includes -
 
 Registering New User
+
 Login User with the above credentials
+
 Make a collection
+
 Read a collection
+
 Update a collection
+
 Delete collection
+
 All the corner cases in which the api should return an error are also covered. The major case of unauthorized user and the validation tests are also covered in this tests.
 We have also use mockgoose which mimics the mongo db server and keeps the data in memory. The main advantage for using mockgoose is that every time test runs we get new set of database to run the test into.
 
@@ -198,7 +229,7 @@ We have also use mockgoose which mimics the mongo db server and keeps the data i
 
 Simarly, models, schemas are also tested.
 
-- 🔘 : Below are screenshots of the tests ran [40 tests in total along with test coverage, and report ]
+- 🔘 : Below are screenshots of the tests ran [**40 tests in total along with test coverage, and report** ]
 
 ![Total Tests](https://res.cloudinary.com/doefdz9w7/image/upload/v1558390156/Api-panda/Screenshot_2019-05-20_at_23.01.10.png)
 ![Total Tests](https://res.cloudinary.com/doefdz9w7/image/upload/v1558390133/Api-panda/Screenshot_2019-05-20_at_23.08.00.png)
@@ -255,7 +286,7 @@ Simarly, models, schemas are also tested.
 - 🔹[nyc](https://www.npmjs.com/package/nyc) : Test Coverage Generator
 - 🔹[sinon](https://www.npmjs.com/package/sinon)
 - 🔹[bluebird](https://www.npmjs.com/package/bluebird) : Full Featured Promise based library
-
+and other standard liblaries.
 #### Third Party Web API's
 
 - 🔹[Random Programming Quotes](https://quotes.stormconsultancy.co.uk/random.json) : Api to generate random quotes
@@ -263,19 +294,28 @@ Simarly, models, schemas are also tested.
 ## Extra features
 
 - 🔘 Validating on the front-end, and back-end express level before data hits the databse to avoid unnesessay delay.
+
 - 🔘 Using CORS to allow secure access from the browser.
+
 - 🔘 Pretty formatted logging on the console every request along with the request's status code and the response time.
+
 - 🔘 Using NYC to generate detail test coverage reports in the console.
+
 - 🔘 The application uses full-fledged promise based asynchronous architecture that non-blocking.
+
 - 🔘 Application uses Comprehensive testing strategies from unit, integration to end-to-end tests including mocking.
+
 - 🔘 The written architecture is production ready and can be scaled as needed. I've ran load tests from an external service comprising of 1000 requests from different origins per second and application performs normally in these conditions.
+
 
 ## Independent learning.
 
-- 💡 I've designed the entire architecture myself by taking a few references into consideration.
-- 💡 ApiDisplay was the most trickiest component to write because it receives form data from the state which is used to make a request and show Error/Response <div>'s accordingly but at the same time it should receive data directly on Url-Click from **UrlAccordin** component and show the appropriate responses. My ideology behind writing every component is **Single Responsibility Principle & High Reusability**. The way I made it work is using an action creator from props but still I think the code is kind of verbose and it could have been improved by introducing an intermediate component.
+- 💡 I've designed the entire architecture myself by taking a few references into consideration. I came across a few good boilerplates but they lacked model and query seperation. I wanted to focus on Seperation of Concerns and reusability as much as possible so I structured it according to my requirements.
+
+- 💡 I'm not very keen on using third party libraries for basic operations like async-await. I wrote my own utility functions instead to hanlde the promises.
+
 - 💡 To enhance the developer experience, I've tried to decompose components as much as possible to avoid strong binding. ES6 features are utilized as much as possible.
-- 💡 To demonstrate React-Hooks, I've created a Quote component which uses a useState and a custom Hook to fetch & set the data. (I still prefer the good'ol classes)
-- 💡 I've added type & value checking wherever possible so the component doesn't break if it gets a null or undefined.
-- 💡 Whenever it comes to using third party libraries, I prefer avoiding them and writing my own utilities if the requirement is not too broad. For instance, instead of using react-form/redux-form, I write my own validations because it doesn't make sense to introduce a big package into your app just to validate a few inputs. Maybe developers disagree with it but being an avid JavaScript developer, I like to have more control over my code.
-- 💡 I've also added StrictMode in couple of my components which throws errors if the legacy methods and other anti-patterns are used in the application. They just run in the development mode so it's nice to have additional strict type checking along with props validation.
+
+- 💡 To demonstrate an external API call from the server, I've used request package that calls the quote end-point and forwards data as a response to the server.
+
+- 💡 Standard error codes for responses have been used. Not only limiting to 200 and 400, I send appropriate response like 422 for validation, and other accepted response codes. 
