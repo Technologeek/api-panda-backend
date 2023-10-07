@@ -3,8 +3,6 @@
 # Assignment 2 - MERN Application
 
 🔸 _Web-Application Name_ : API-Panda-Backend  
-🔸 _Author_ : Rahul Patil  
-🔸 _Student Reg No_ : 20083299
 
 ## Repositories
 
